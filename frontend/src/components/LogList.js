@@ -7,46 +7,48 @@ function LogList({ logs }) {
   const totalPages = Math.ceil(logs.length / perPage);
   const paginatedLogs = logs.slice((page - 1) * perPage, page * perPage);
 
-  const getColor = (level) => {
+  const getLevelStyle = (level) => {
     switch (level) {
       case "error":
-        return "#ffe5e5";
+        return "log-entry error";
       case "warn":
-        return "#fff3cd";
+        return "log-entry warn";
       case "info":
-        return "#e2f0fb";
-      case "debug":
-        return "#f8f9fa";
+        return "log-entry info";
       default:
-        return "#fff";
+        return "log-entry";
     }
   };
 
   return (
-    <div>
-      {paginatedLogs.length === 0 && <p>No logs found.</p>}
+    <div className="fade-in">
+      {paginatedLogs.length === 0 && (
+        <div className="card p-3 text-muted">No logs found.</div>
+      )}
+
       {paginatedLogs.map((log, index) => (
-        <div
-          key={index}
-          className="mb-3 p-3 border"
-          style={{ backgroundColor: getColor(log.level) }}
-        >
-          <strong>{log.level.toUpperCase()}</strong> –{" "}
-          {new Date(log.timestamp).toLocaleString()}
-          <br />
-          <em>{log.message}</em>
-          <br />
-          Resource: {log.resourceId}
-          <br />
-          <small>
-            Trace: {log.traceId} | Span: {log.spanId} | Commit: {log.commit}
-          </small>
+        <div key={index} className={`card mb-3 ${getLevelStyle(log.level)}`}>
+          <div className="d-flex justify-content-between">
+            <strong>{log.level.toUpperCase()}</strong>
+            <span className="text-muted">
+              {new Date(log.timestamp).toLocaleString()}
+            </span>
+          </div>
+
+          <p className="mb-1 mt-2">{log.message}</p>
+
+          <div className="small text-muted">
+            <div>Resource: {log.resourceId}</div>
+            <div>
+              Trace: {log.traceId} | Span: {log.spanId} | Commit: {log.commit}
+            </div>
+          </div>
         </div>
       ))}
 
       {/* Pagination controls */}
       {totalPages > 1 && (
-        <div className="d-flex justify-content-between align-items-center">
+        <div className="d-flex justify-content-between align-items-center mt-3">
           <button
             className="btn btn-outline-primary"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -54,7 +56,7 @@ function LogList({ logs }) {
           >
             ← Prev
           </button>
-          <span>
+          <span className="fw-semibold">
             Page {page} of {totalPages}
           </span>
           <button

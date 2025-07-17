@@ -23,8 +23,20 @@ function LogChart({ logs }) {
       {
         label: "Logs by Level",
         data: Object.values(levelCounts),
-        backgroundColor: ["#dc3545", "#ffc107", "#0d6efd", "#6c757d"],
-        borderRadius: 6,
+        backgroundColor: [
+          "rgba(239, 68, 68, 0.7)", // error - red
+          "rgba(234, 179, 8, 0.7)", // warn - yellow
+          "rgba(59, 130, 246, 0.7)", // info - blue
+          "rgba(107, 114, 128, 0.7)", // debug/other - gray
+        ],
+        borderColor: [
+          "rgba(239, 68, 68, 1)",
+          "rgba(234, 179, 8, 1)",
+          "rgba(59, 130, 246, 1)",
+          "rgba(107, 114, 128, 1)",
+        ],
+        borderWidth: 1,
+        borderRadius: 8,
         barThickness: 40,
       },
     ],
@@ -43,18 +55,23 @@ function LogChart({ logs }) {
         beginAtZero: true,
         ticks: {
           stepSize: 1,
+          color: "#475569", // slate-600
+        },
+      },
+      x: {
+        ticks: {
+          color: "#475569",
         },
       },
     },
   };
 
   return (
-    <div
-      className="card p-4 mb-4 shadow-sm"
-      style={{ maxWidth: 600, margin: "0 auto", height: 300 }}
-    >
+    <div className="chart-wrapper fade-in">
       <h5 className="mb-3 text-center">📊 Logs by Level</h5>
-      <Bar data={data} options={options} />
+      <div style={{ height: "280px" }}>
+        <Bar data={data} options={options} />
+      </div>
     </div>
   );
 }

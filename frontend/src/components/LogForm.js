@@ -32,7 +32,7 @@ function LogForm({ onSubmitSuccess }) {
       await axios.post("http://localhost:5000/logs", payload);
       setMessage("✅ Log successfully added!");
       setLogData(initialState);
-      onSubmitSuccess(); // to refresh logs
+      onSubmitSuccess(); // refresh logs
     } catch (err) {
       console.error(err);
       setMessage("❌ Failed to add log. Check inputs.");
@@ -40,47 +40,105 @@ function LogForm({ onSubmitSuccess }) {
   };
 
   return (
-    <div className="card p-4 mb-4">
-      <h5>Add New Log</h5>
-      {message && <div className="alert alert-info mt-2">{message}</div>}
+    <div className="card fade-in">
+      <h5 className="mb-3">➕ Add New Log</h5>
 
       <form onSubmit={handleSubmit}>
-        <div className="row">
-          {[
-            "level",
-            "message",
-            "resourceId",
-            "timestamp",
-            "traceId",
-            "spanId",
-            "commit",
-          ].map((field) => (
-            <div className="col-md-4 mb-3" key={field}>
-              <input
-                type={field === "timestamp" ? "datetime-local" : "text"}
-                className="form-control"
-                name={field}
-                value={logData[field]}
-                onChange={handleChange}
-                placeholder={field}
-                required
-              />
-            </div>
-          ))}
+        <div className="row mb-3">
+          <div className="col-md-4">
+            <label>Level</label>
+            <select
+              className="form-control"
+              name="level"
+              value={logData.level}
+              onChange={handleChange}
+            >
+              <option value="">Select Level</option>
+              <option value="error">error</option>
+              <option value="warn">warn</option>
+              <option value="info">info</option>
+            </select>
+          </div>
+
+          <div className="col-md-8">
+            <label>Message</label>
+            <input
+              className="form-control"
+              name="message"
+              value={logData.message}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <div className="col-md-6">
+            <label>Resource ID</label>
+            <input
+              className="form-control"
+              name="resourceId"
+              value={logData.resourceId}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-6">
+            <label>Timestamp</label>
+            <input
+              className="form-control"
+              type="datetime-local"
+              name="timestamp"
+              value={logData.timestamp}
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="row mb-3">
+          <div className="col-md-4">
+            <label>Trace ID</label>
+            <input
+              className="form-control"
+              name="traceId"
+              value={logData.traceId}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label>Span ID</label>
+            <input
+              className="form-control"
+              name="spanId"
+              value={logData.spanId}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="col-md-4">
+            <label>Commit</label>
+            <input
+              className="form-control"
+              name="commit"
+              value={logData.commit}
+              onChange={handleChange}
+            />
+          </div>
         </div>
 
         <div className="mb-3">
+          <label>Metadata (JSON)</label>
           <textarea
-            name="metadata"
             className="form-control"
-            placeholder='Metadata (JSON like {"key": "value"})'
-            rows="2"
+            name="metadata"
+            rows={2}
             value={logData.metadata}
             onChange={handleChange}
           />
         </div>
 
-        <button className="btn btn-primary">Submit Log</button>
+        {message && <div className="text-success mb-2">{message}</div>}
+
+        <button type="submit" className="btn btn-primary">
+          Submit Log
+        </button>
       </form>
     </div>
   );

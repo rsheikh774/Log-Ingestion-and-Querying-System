@@ -7,6 +7,7 @@ import Navbar from "./components/NavBar";
 import LogChart from "./components/LogChart";
 import { io } from "socket.io-client";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
 import LoadingBar from "react-top-loading-bar";
 
@@ -47,31 +48,33 @@ function App() {
   }, [filters]);
 
   return (
-    <div>
-      <Navbar showForm={showForm} setShowForm={setShowForm} />
-      <LoadingBar
-        color="#f11946"
-        progress={progress}
-        onLoaderFinished={() => setProgress(0)}
-      />
+    <div className="container-fluid px-3 px-md-5 py-3">
+      <div>
+        <Navbar showForm={showForm} setShowForm={setShowForm} />
+        <LoadingBar
+          color="#f11946"
+          progress={progress}
+          onLoaderFinished={() => setProgress(0)}
+        />
 
-      <div className="container py-3">
-        {showForm && (
-          <LogForm
-            onSubmitSuccess={() =>
-              fetchLogs(filters).then((res) => setLogs(res.data))
-            }
-          />
-        )}
+        <div className="container py-3">
+          {showForm && (
+            <LogForm
+              onSubmitSuccess={() =>
+                fetchLogs(filters).then((res) => setLogs(res.data))
+              }
+            />
+          )}
 
-        <div className="card p-4 mb-4">
-          <h5>🔍 Filters</h5>
-          <FilterBar filters={filters} setFilters={setFilters} />
+          <div className="card p-4 mb-4">
+            <h5>🔍 Filters</h5>
+            <FilterBar filters={filters} setFilters={setFilters} />
+          </div>
+
+          <LogChart logs={logs} />
+
+          {loading ? <p>Loading logs...</p> : <LogList logs={logs} />}
         </div>
-
-        <LogChart logs={logs} />
-
-        {loading ? <p>Loading logs...</p> : <LogList logs={logs} />}
       </div>
     </div>
   );

@@ -1,17 +1,13 @@
 import React from "react";
+import "./Navbar.css"; // ✅ separate styles (below)
 
 function Navbar({ showForm, setShowForm }) {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-      <div className="container-fluid">
-        <span className="navbar-brand">🧾 Log Dashboard</span>
-        <button
-          className="btn btn-outline-light"
-          onClick={() => setShowForm((prev) => !prev)}
-        >
-          {showForm ? "Close Log Form" : "➕ Add New Log"}
-        </button>
-      </div>
+    <nav className="evallo-navbar d-flex justify-content-between align-items-center px-4 py-2">
+      <div className="evallo-logo">🧾 LogBoard</div>
+      <button className="btn evallo-btn" onClick={() => setShowForm(!showForm)}>
+        {showForm ? "Hide Form" : "➕ Add Log"}
+      </button>
     </nav>
   );
 }
